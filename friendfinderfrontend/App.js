@@ -3,7 +3,6 @@ import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
-const URL = 'https://74e889f3.ngrok.io';
 
 export default class App extends React.Component {
   state = {
@@ -26,22 +25,26 @@ export default class App extends React.Component {
       this.setState({ location, region })
   }
 
-  getInitialState() {
-    return {
-      markers: []
-    };
+ 
+
+  getPersonsFromApiAsync = () => {
+    return fetch('https://b499ad36.ngrok.io/api/friends/register/100',{
+      method: 'post',
+      body: JSON.stringify({
+        userName: "Benny",
+        loc: {type: "Point",
+              coordinates: "[1337, 1337]"}
+      })
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res);
+        //this.setState({persons: res})
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
-
-  fetchPersons() {
-    fetch("URL").then(response => response.json())
-    .then(data => {
-      
-      console.log("WUB" +data)
-    }).catch(error =>{console.log(error)});
-  }
-    
-
-
 
   render() {
 
@@ -55,7 +58,7 @@ export default class App extends React.Component {
           showsUserLocation={true}
           region={this.state.region}
         >
-          {this.state.persons.map(marker => {
+          {this.state.persons.map(person => {
             return (
               <MapView.Marker
                 coordinate={{
@@ -71,7 +74,7 @@ export default class App extends React.Component {
           })}
         </MapView>
         <Button
-          onPress={this.fetchPersons}
+          onPress={() => this.getPersonsFromApiAsync()}
           title="Update list yo!"
           color="#841584"
           accessibilityLabel="Oh wow, this is just like magic!"
