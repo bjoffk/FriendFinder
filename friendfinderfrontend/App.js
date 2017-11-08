@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
@@ -9,6 +9,7 @@ export default class App extends React.Component {
     location: { coords: { latitude: 0, longitude: 0 } },
     errorMessage: null,
     persons: [],
+    name: 'Write username here',
   };
 
   componentWillMount() {
@@ -28,26 +29,31 @@ export default class App extends React.Component {
  
 
   getPersonsFromApiAsync = () => {
-    return fetch('https://b499ad36.ngrok.io/api/friends/register/100',{
-      method: 'post',
+    return fetch('https://9585535f.ngrok.io/api/friends/register/100',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
-        userName: "Benny",
-        loc: {type: "Point",
-              coordinates: "[1337, 1337]"}
+        userName: this.state.name,
+        loc: {type: 'Point',
+              coordinates: [this.state.location.coords.latitude, this.state.location.coords.longitude]}
       })
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
-        //this.setState({persons: res})
+        console.log("Adding: " +res);
+        this.setState({persons: res})
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
-  render() {
+  
 
+  render() {
 
     return (
       <View style={{ flex: 1 }} >
@@ -62,23 +68,35 @@ export default class App extends React.Component {
             return (
               <MapView.Marker
                 coordinate={{
-                  latitude: 55.7705449,
-                  longitude: 12.5118374
+                  latitude: person.loc.coordinates[0],
+                  longitude: person.loc.coordinates[1]
                 }}
-                title={"Cphbusiness Lyngby"}
-                description={"Educational Academy"}
+                title={person.userName}
+                description={"Wow, you pushed me!"}
                 pinColor='turquoise'
-
               />
             );
           })}
         </MapView>
+        <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(name) => this.setState({name})}
+        value={this.state.name}
+      />
         <Button
           onPress={() => this.getPersonsFromApiAsync()}
           title="Update list yo!"
           color="#841584"
           accessibilityLabel="Oh wow, this is just like magic!"
         />
+        {this.state.persons.map(person => {
+          return (
+            <Text>
+            <Text style={{fontWeight: 'bold'}}>{person.userName + ": "}</Text>
+            <Text>{"Lat: " +person.loc.coordinates[0] + " Long: "+ person.loc.coordinates[1]  + "\n"}</Text>
+            </Text>
+          );
+        })}
       </View>
     );
   }

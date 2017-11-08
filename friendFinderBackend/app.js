@@ -12,13 +12,16 @@ app.get('/', function (req, res) {
 
 app.post('/api/friends/register/:distance', function(req,res){
   
-  register(req.body.userName, req.body.loc.coordinates, req.params.distance, function(err,docs){
-    if(err){
-      return console.log("ERROR",err)
-    }
-    console.log("DOCS",JSON.stringify(docs,null,"  "));
-    res.send(JSON.stringify(docs,null,"  "));
-  });
+console.log(req.body.loc.coordinates);
+
+
+register(req.body.userName, [55.7705458, 12.5118374], req.params.distance, function(err,docs){
+  if(err){
+    return console.log("ERROR",err)
+  }
+  console.log("DOCS",JSON.stringify(docs,null,"  "));
+  res.send(JSON.stringify(docs,null,"  "));
+});
   
 });
 
