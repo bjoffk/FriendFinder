@@ -1,15 +1,15 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
-const URL = 'https://l.facebook.com/l.php?u=https%3A%2F%2F74e889f3.ngrok.io%2F&h=ATP_HgsLPI3IySkzoT7DziQwdnAEYqSggQ8IeUjhyYjNQ_hjGozBT3wdfMDuwZ-aIs_mKUmqA7Zfq7-fcb_KCuptZklgevlp7rm2WIPk3hJNlWbk0vaBt9M1WmGL-iqqgD4JE-aHNDXHN5SXDxo';
+const URL = 'https://74e889f3.ngrok.io';
 
 export default class App extends React.Component {
   state = {
     location: { coords: { latitude: 0, longitude: 0 } },
     errorMessage: null,
-    markers: [],
+    persons: [],
   };
 
   componentWillMount() {
@@ -32,6 +32,14 @@ export default class App extends React.Component {
     };
   }
 
+  fetchPersons() {
+    fetch("URL").then(response => response.json())
+    .then(data => {
+      
+      console.log("WUB" +data)
+    }).catch(error =>{console.log(error)});
+  }
+    
 
 
 
@@ -39,7 +47,7 @@ export default class App extends React.Component {
 
 
     return (
-      <View style={{ flex: 0.7 }} >
+      <View style={{ flex: 1 }} >
 
         <MapView
           style={{ flex: 0.7 }}
@@ -47,7 +55,7 @@ export default class App extends React.Component {
           showsUserLocation={true}
           region={this.state.region}
         >
-          {this.state.markers.map(marker => {
+          {this.state.persons.map(marker => {
             return (
               <MapView.Marker
                 coordinate={{
@@ -62,7 +70,12 @@ export default class App extends React.Component {
             );
           })}
         </MapView>
-        <Text>'hej'</Text>
+        <Button
+          onPress={this.fetchPersons}
+          title="Update list yo!"
+          color="#841584"
+          accessibilityLabel="Oh wow, this is just like magic!"
+        />
       </View>
     );
   }
