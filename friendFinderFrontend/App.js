@@ -134,25 +134,6 @@ export default class App extends React.Component {
           );
         })}
         </View>        
-        
-        {/* if(Platform.OS === 'ios'
-        <View
-        style={{
-          backgroundColor: 'navy',
-          flex: 0.3,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'stretch',
-          }}
-        >
-          <Text style={{ textAlign: "center", fontSize: 20, color: 'white' }}>Pinch map to zoom{'\n'}
-            <Image 
-              style={styles.imgProfile}
-              source={require('./assets/icon.png')} 
-            />
-          </Text>
-        </View> */}
-        
       </View>
     );
   }
