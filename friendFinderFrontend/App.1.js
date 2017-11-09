@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
@@ -10,7 +10,7 @@ export default class App extends React.Component {
     errorMessage: null,
     persons: [],
     name: 'abc',
-    dist: '',
+    dist: '22',
     pinColors: ['red', 'orange', 'yellow', 'green', 'blue', 'turquoise', 'violet', 'indigo'],
   };
 
@@ -35,9 +35,9 @@ export default class App extends React.Component {
 
   locationChanged = (location) => {
     region = {
-      latitude: 56.29740455181511, //56.29740455181511 = Centred in Denmark. If desired centred on user location: location.coords.latitude,
-      longitude: 11.728640201207554, //11.728640201207554 = Centred in Denmark. If desired centred on user location: location.coords.longitude,
-      latitudeDelta: 3.5, //3.5 = zoom level nationwide. 0.1 = zoom level 10km radius
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.8, //0.1
       longitudeDelta: 0.05, //0.05
     },
       this.setState({ location, region })
@@ -66,14 +66,11 @@ export default class App extends React.Component {
       });
   }
 
-  onMapLayout = () => this.map.fitToElements(true);//boolean specifies whether animation is desired
-
   render() {
     return (
       <View style={{ flex: 1 }} >
+
         <MapView
-          ref={ref => this.map = ref}
-          onLayout={this.onMapLayout}
           style={{ flex: 0.7 }}
           showsUserLocation={true}
           region={this.state.region}
@@ -109,12 +106,12 @@ export default class App extends React.Component {
           keyboardType = 'numeric'
           onChangeText = {(text)=> this.distanceChanged(text)}
           value = {this.state.dist}
-          maxLength = {3}  
+          maxLength = {2} 
         />
         <Button
           onPress={
             () => {
-              if(this.state.dist){//check to ensure dist has a value entered before running fetch function
+              if(this.state.dist){
                 this.getPersonsFromApiAsync()
               }
             }
@@ -123,34 +120,14 @@ export default class App extends React.Component {
           color="#841584"
           accessibilityLabel="Oh wow, this is just like magic!"
         />
-
-        <View style={{backgroundColor: '#000000'}}>
-        
         {this.state.persons.map(person => {
           return (
             <Text key={person.userName}>
-            <Text style={{fontWeight: 'bold', color: 'white'}}>{person.userName + ": "}</Text>
-            <Text style={{color: 'blue'}}>{"Lat: " +person.loc.coordinates[0] + " Long: "+ person.loc.coordinates[1]  + "\n"}</Text>
+            <Text style={{fontWeight: 'bold'}}>{person.userName + ": "}</Text>
+            <Text>{"Lat: " +person.loc.coordinates[0] + " Long: "+ person.loc.coordinates[1]  + "\n"}</Text>
             </Text>
           );
         })}
-        </View>        
-        <View
-        style={{
-          backgroundColor: 'navy',
-          flex: 0.3,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'stretch',
-          }}
-        >
-          <Text style={{ textAlign: "center", fontSize: 20, color: 'white' }}>Pinch map to zoom{'\n'}
-            <Image 
-              style={styles.imgProfile}
-              source={require('./assets/icon.png')} 
-            />
-          </Text>
-        </View>
       </View>
     );
   }

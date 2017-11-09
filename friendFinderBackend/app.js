@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 app.post('/api/friends/register/:distance', function(req,res){
   
 
-register(req.body.userName, [parseFloat(req.body.loc.coordinates[0]), parseFloat(req.body.loc.coordinates[1])], req.params.distance, function(err,docs){
+register(req.body.userName, [parseFloat(req.body.loc.coordinates[0]), parseFloat(req.body.loc.coordinates[1])], parseFloat(req.params.distance), function(err,docs){
   if(err){
     return console.log("ERROR",err)
   }
