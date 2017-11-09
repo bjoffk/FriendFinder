@@ -9,7 +9,7 @@ export default class App extends React.Component {
     location: { coords: { latitude: 0, longitude: 0 } },
     errorMessage: null,
     persons: [],
-    name: 'abc',
+    name: '',
     dist: '',
     pinColors: ['red', 'orange', 'yellow', 'green', 'blue', 'turquoise', 'violet', 'indigo'],
   };
@@ -35,9 +35,9 @@ export default class App extends React.Component {
 
   locationChanged = (location) => {
     region = {
-      latitude: 56.29740455181511, //56.29740455181511 = Centred in Denmark. If desired centred on user location: location.coords.latitude,
-      longitude: 11.728640201207554, //11.728640201207554 = Centred in Denmark. If desired centred on user location: location.coords.longitude,
-      latitudeDelta: 3.5, //3.5 = zoom level nationwide. 0.1 = zoom level 10km radius
+      latitude: location.coords.latitude, //56.29740455181511 = Centred in Denmark. If desired centred on user location: location.coords.latitude,
+      longitude: location.coords.longitude, //11.728640201207554 = Centred in Denmark. If desired centred on user location: location.coords.longitude,
+      latitudeDelta: 0.8, //3.5 = zoom level nationwide. 0.1 = zoom level 10km radius
       longitudeDelta: 0.05, //0.05
     },
       this.setState({ location, region })
@@ -105,7 +105,6 @@ export default class App extends React.Component {
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           placeholder='Radius (km) to find friends within'
-          //onChangeText={(dist) => this.setState({dist})}
           keyboardType = 'numeric'
           onChangeText = {(text)=> this.distanceChanged(text)}
           value = {this.state.dist}
@@ -120,7 +119,7 @@ export default class App extends React.Component {
             }
             }
           title="Show / List Friends"
-          color="#841584"
+          color="purple"
           accessibilityLabel="Oh wow, this is just like magic!"
         />
 
@@ -135,6 +134,8 @@ export default class App extends React.Component {
           );
         })}
         </View>        
+        
+        {/* if(Platform.OS === 'ios'
         <View
         style={{
           backgroundColor: 'navy',
@@ -150,7 +151,8 @@ export default class App extends React.Component {
               source={require('./assets/icon.png')} 
             />
           </Text>
-        </View>
+        </View> */}
+        
       </View>
     );
   }
