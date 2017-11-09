@@ -44,7 +44,7 @@ export default class App extends React.Component {
   }
 
   getPersonsFromApiAsync = () => {
-    return fetch('https://9a97b1f7.ngrok.io/api/friends/register/'+this.state.dist,{
+    return fetch('https://jungle-pressure.glitch.me/api/friends/register/'+this.state.dist,{
       method: 'POST',
       headers: {
         'Accept': 'application/json',
